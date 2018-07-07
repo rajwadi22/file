@@ -1,0 +1,26 @@
+page-full {
+   
+    .slide-zoom{
+        height: 100%;
+    }
+    button{
+        width: 100%;   
+    }
+    .buttons{
+        border-radius: 50%;
+        background-color: gray;
+        color: white;
+        width: 50px;
+        height: 50px;
+    }
+    .cols,.show_button{
+        text-align: center;
+    }
+    .cols{
+        display: none;
+    }
+    .show{
+        display: block;
+    }
+
+}

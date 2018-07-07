@@ -1,0 +1,12 @@
+<ion-header style="text-align: center;color: white;font-size: 20px;">
+ <ion-navbar>
+     The Black
+    </ion-navbar>
+</ion-header>
+
+<ion-content style="background-color: gray;" class="card-background-page">
+  
+  <ion-card *ngFor="let p of path;let i = index"> 
+    <img  (click)="onClick(i)" src="assets/imgs/{{p}}" />
+  </ion-card>
+</ion-content>

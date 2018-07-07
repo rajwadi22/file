@@ -1,0 +1,15 @@
+<ion-content>
+  <ion-slides initialSlide="{{index}}" (ionSlideDidChange)="sildeChanged()">
+    <ion-slide *ngFor="let p of path"> 
+        <img style="height: 100%;width: 100%;" src="assets/imgs/{{p}}" class="background" />
+    </ion-slide>
+  </ion-slides>
+  <ion-fab bottom right>
+      <button ion-fab style="background-color: gray;"><ion-icon name="add"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button (click)="onSet()" ion-fab><ion-icon  name="image"></ion-icon></button>
+        <button (click)="onSave()" ion-fab><ion-icon name="download"></ion-icon></button>
+        <button (click)="onShare()" ion-fab><ion-icon name="share"></ion-icon></button>
+      </ion-fab-list>
+    </ion-fab>
+</ion-content>
