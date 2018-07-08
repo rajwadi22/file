@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Toast } from '@ionic-native/toast';
 import { File } from '@ionic-native/file';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Slides } from 'ionic-angular';
 declare var window;
@@ -37,7 +38,7 @@ export class FullPage {
 
   index:number=0;
   i:number;
-  constructor(private androidFullScreen: AndroidFullScreen,private file: File,private socialSharing : SocialSharing,public navCtrl: NavController, public navParams: NavParams,private toast : Toast) {
+  constructor(private androidFullScreen: AndroidFullScreen,private transfer: FileTransfer,private file: File,private socialSharing : SocialSharing,public navCtrl: NavController, public navParams: NavParams,private toast : Toast) {
     this.index = navParams.get('index');
     this.androidFullScreen.immersiveMode();
    
@@ -60,25 +61,58 @@ export class FullPage {
     );
   
   }
-  onSave(){
-    //let path = this.file.dataDirectory;
-    let imageName = this.path[this.i];
-    const ROOT_DIRECTORY = 'file:///sdcard//';
-    const downloadFolderName = 'DownloadFolder';
-    
-    //Create a folder in memory location
-    this.file.createDir(ROOT_DIRECTORY, downloadFolderName, true)
-      .then((entries) => {
-        //Copy our asset/img/FreakyJolly.jpg to folder we created
-        this.file.copyFile(this.file.applicationDirectory + "www/assets/imgs/", imageName, ROOT_DIRECTORY + downloadFolderName + '//', imageName)
-          .then((entries) => {
-            this.toast.show(JSON.stringify(entries), '5000', 'center').subscribe(
+  onSave(){    
+     let imageName = this.path[this.i]   
+     const fileTransfer: FileTransferObject = this.transfer.create();
+    const url =encodeURI(this.file.applicationDirectory+'www/assets/imgs/'+imageName);
+    this.file.checkDir(this.file.externalRootDirectory, 'Black')
+    .then( (entry) => {
+      fileTransfer.download(url, this.file.externalRootDirectory+'Black/'+imageName).then((entry) => {
+        this.toast.show('Download Complete', '5000', 'center').subscribe(
+          toast => {
+            console.log(toast);
+          }
+        );
+
+        }, (error) => {
+          this.toast.show(JSON.stringify(error), '5000', 'center').subscribe(
+            toast => {
+              console.log(toast);
+            }
+          );
+
+        });
+    })
+    .catch((error) => {
+      let result = this.file.createDir(this.file.externalRootDirectory,'Black',true);
+      result.then( data => {
+        fileTransfer.download(url, this.file.externalRootDirectory+'Black/'+imageName).then((entry) => {
+
+          this.toast.show('Download Complete', '5000', 'center').subscribe(
+            toast => {
+              console.log(toast);
+            }
+          );
+
+           }, (error) => {
+            
+            this.toast.show(JSON.stringify(error), '5000', 'center').subscribe(
               toast => {
                 console.log(toast);
               }
             );
-          });
-        });
+           });
+        
+      }).catch( error => {
+
+        this.toast.show(JSON.stringify(error), '5000', 'center').subscribe(
+          toast => {
+            console.log(toast);
+          }
+        );
+
+      });
+    });
       
   }
   onShare() { 
@@ -95,7 +129,7 @@ export class FullPage {
           .then((entries) => {
  
             //Common sharing event will open all available application to share
-            this.socialSharing.share("Message","Subject", ROOT_DIRECTORY + downloadFolderName + "/" + imageName, imageName)
+            this.socialSharing.share("The Black","Subject", ROOT_DIRECTORY + downloadFolderName + "/" + imageName, imageName)
               .then((entries) => {
               
               })
