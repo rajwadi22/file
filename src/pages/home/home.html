@@ -5,8 +5,11 @@
 </ion-header>
 
 <ion-content style="background-color: gray;" class="card-background-page">
-  
-  <ion-card *ngFor="let p of path;let i = index"> 
-    <img  (click)="onClick(i)" src="assets/imgs/{{p}}" />
-  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col style="height:180px;width: 100%;padding: 3px;" *ngFor="let p of path;let i = index" col-6>
+        <img style="height: 100%;width: 100%;" (click)="onClick(i)" src="assets/imgs/{{p}}" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
